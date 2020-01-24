@@ -1,5 +1,3 @@
-import loginService from "../services/login"
-
 const userReducer = (state = null, action) => {
   switch (action.type) {
     case "SET_USER":
@@ -11,13 +9,7 @@ const userReducer = (state = null, action) => {
   }
 }
 
-export const loginUser = token => {
-  return async dispatch => {
-    const userToken = await loginService.login(token)
-    console.log(userToken)
-    dispatch({ type: "SET_USER", userToken })
-  }
-}
+export const loginUser = user => ({ type: "SET_USER", user })
 
 export const logoutUser = () => ({ type: "UNSET_USER" })
 

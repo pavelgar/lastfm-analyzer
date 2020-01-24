@@ -25,7 +25,7 @@ const App = ({ user, loginUser, logoutUser }) => {
     const loggedUserJSON = window.localStorage.getItem(LOGGED_IN_USER)
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      loginUser(user)
+      loginUser(user.name)
     } else {
       // Otherwise wait for user to authenticate and then create new session
       const token = new URLSearchParams(search).get("token")
@@ -34,7 +34,7 @@ const App = ({ user, loginUser, logoutUser }) => {
           .login(token)
           .then(user => {
             window.localStorage.setItem(LOGGED_IN_USER, JSON.stringify(user))
-            loginUser(user)
+            loginUser(user.name)
             history.push("/")
           })
           .catch(error => console.error("Authentication failed"))

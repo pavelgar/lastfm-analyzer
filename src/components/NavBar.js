@@ -6,7 +6,7 @@ import UserMenuItem from "./UserMenuItem"
 
 const NavBar = ({ user, handleLogout }) => {
   return (
-    <Menu fixed="top" inverted size="large">
+    <Menu fixed="top" inverted borderless size="large">
       <Container>
         <Menu.Item as={Link} header to="/">
           <Icon name="lastfm" size="big" style={{ marginRight: "1em" }} />

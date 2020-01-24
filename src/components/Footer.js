@@ -9,10 +9,14 @@ const Footer = props => {
       style={{ margin: "5em 0em 0em", padding: "5em 0em" }}
     >
       <Container textAlign="center">
+        <Icon name="github" size="large" />
         <p>
-          LastFm Analyzer. Made by{" "}
-          <a href="https://github.com/pavelgar">Pavel Garmuyev </a>
-          <Icon name="github" size="large" />
+          Made by <a href="https://github.com/pavelgar">Pavel Garmuyev</a>
+          <br />
+          Submit suggestions and issues{" "}
+          <a href="https://github.com/pavelgar/lastfm-analyzer/issues">
+            here <Icon name="external" />
+          </a>
         </p>
       </Container>
     </Segment>

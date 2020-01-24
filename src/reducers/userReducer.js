@@ -1,3 +1,5 @@
+import userService from "../services/user"
+
 const userReducer = (state = null, action) => {
   switch (action.type) {
     case "SET_USER":
@@ -9,7 +11,11 @@ const userReducer = (state = null, action) => {
   }
 }
 
-export const loginUser = user => ({ type: "SET_USER", user })
+// Fetches full user details by name
+export const loginUser = username => async dispatch => {
+  const user = await userService.getInfo(username)
+  dispatch({ type: "SET_USER", user })
+}
 
 export const logoutUser = () => ({ type: "UNSET_USER" })
 

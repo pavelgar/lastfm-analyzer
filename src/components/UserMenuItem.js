@@ -1,12 +1,23 @@
 import React from "react"
-import { Dropdown, Menu } from "semantic-ui-react"
+import { Dropdown, Menu, Image } from "semantic-ui-react"
 
 const UserMenuItem = ({ user, handleLogout }) => {
+  const trigger = (
+    <span>
+      <Image avatar src={user.image[0]["#text"]} /> {user.name}
+    </span>
+  )
+
   return (
     <Menu.Menu position="right">
-      <Dropdown item simple text={user.name}>
+      <Dropdown trigger={trigger} item simple>
         <Dropdown.Menu>
-          <Dropdown.Item icon="external" text="last.fm profile" />
+          <Dropdown.Item
+            as="a"
+            href={user.url}
+            icon="external"
+            text="last.fm profile"
+          />
           <Dropdown.Divider />
           <Dropdown.Item icon="setting" text="Settings" />
           <Dropdown.Item icon="log out" text="Log out" onClick={handleLogout} />

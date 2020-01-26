@@ -10,9 +10,10 @@ import { loginUser, logoutUser } from "../reducers/userReducer"
 import LoginButton from "./LoginButton"
 import NavBar from "./NavBar"
 import Footer from "./Footer"
+import ActivityChart from "./ActivityChart"
 import PrivateRoute from "./PrivateRoute"
 
-const LOGGED_IN_USER = "loggedInUser"
+const USER_SESSION = "userSession"
 
 const App = ({ user, loginUser, logoutUser }) => {
   // Get current location and the query parameter "token"
@@ -22,28 +23,29 @@ const App = ({ user, loginUser, logoutUser }) => {
   // Session management effect
   useEffect(() => {
     // Check if user has old session
-    const loggedUserJSON = window.localStorage.getItem(LOGGED_IN_USER)
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      loginUser(user.name)
+    const sessionJSON = window.localStorage.getItem(USER_SESSION)
+    if (sessionJSON && !user) {
+      console.log("Updating the session")
+      const session = JSON.parse(sessionJSON)
+      loginUser(session.name)
     } else {
       // Otherwise wait for user to authenticate and then create new session
       const token = new URLSearchParams(search).get("token")
       if (token && pathname === "/login") {
+        console.log("Authenticating...")
         loginService
           .login(token)
-          .then(user => {
-            window.localStorage.setItem(LOGGED_IN_USER, JSON.stringify(user))
-            loginUser(user.name)
+          .then(session => {
+            window.localStorage.setItem(USER_SESSION, JSON.stringify(session))
             history.push("/")
           })
           .catch(error => console.error("Authentication failed"))
       }
     }
-  }, [history, pathname, search, loginUser])
+  }, [user, history, pathname, search, loginUser])
 
   const handleLogout = () => {
-    window.localStorage.removeItem(LOGGED_IN_USER)
+    window.localStorage.removeItem(USER_SESSION)
     logoutUser()
     history.push("/")
   }
@@ -62,7 +64,7 @@ const App = ({ user, loginUser, logoutUser }) => {
             </p>
           </Route>
           <PrivateRoute path="/user">
-            <h3>Protected</h3>
+            <ActivityChart />
           </PrivateRoute>
         </Switch>
       </Container>

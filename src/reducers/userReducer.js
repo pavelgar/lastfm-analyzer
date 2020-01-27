@@ -4,7 +4,7 @@ const userReducer = (state = null, action) => {
   switch (action.type) {
     case "SET_USER":
       return action.user
-    case "UNSET_USER":
+    case "UNLOAD_USER":
       return null
     default:
       return state
@@ -12,11 +12,11 @@ const userReducer = (state = null, action) => {
 }
 
 // Fetches full user details by name
-export const loginUser = username => async dispatch => {
+export const loadUser = username => async dispatch => {
   const user = await userService.getInfo(username)
   dispatch({ type: "SET_USER", user })
 }
 
-export const logoutUser = () => ({ type: "UNSET_USER" })
+export const unloadUser = () => ({ type: "UNLOAD_USER" })
 
 export default userReducer

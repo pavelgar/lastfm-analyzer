@@ -5,7 +5,7 @@ import { connect } from "react-redux"
 import { Container, Header } from "semantic-ui-react"
 
 import loginService from "../services/login"
-import { loginUser, logoutUser } from "../reducers/userReducer"
+import { loadUser, unloadUser } from "../reducers/userReducer"
 
 import LoginButton from "./LoginButton"
 import NavBar from "./NavBar"
@@ -15,38 +15,39 @@ import PrivateRoute from "./PrivateRoute"
 
 const USER_SESSION = "userSession"
 
-const App = ({ user, loginUser, logoutUser }) => {
+const App = ({ user, loadUser, unloadUser }) => {
   // Get current location and the query parameter "token"
   const history = useHistory()
-  const { search, pathname } = useLocation()
+  const location = useLocation()
 
   // Session management effect
   useEffect(() => {
     // Check if user has old session
     const sessionJSON = window.localStorage.getItem(USER_SESSION)
     if (sessionJSON && !user) {
-      console.log("Updating the session")
+      console.log("Loading the session...")
       const session = JSON.parse(sessionJSON)
-      loginUser(session.name)
+      loadUser(session.name)
     } else {
       // Otherwise wait for user to authenticate and then create new session
-      const token = new URLSearchParams(search).get("token")
-      if (token && pathname === "/login") {
+      const token = new URLSearchParams(location.search).get("token")
+      if (token && location.pathname === "/login") {
         console.log("Authenticating...")
         loginService
           .login(token)
           .then(session => {
+            console.log("Authentication successful.")
             window.localStorage.setItem(USER_SESSION, JSON.stringify(session))
             history.push("/")
           })
           .catch(error => console.error("Authentication failed"))
       }
     }
-  }, [user, history, pathname, search, loginUser])
+  }, [user, history, location, loadUser])
 
   const handleLogout = () => {
     window.localStorage.removeItem(USER_SESSION)
-    logoutUser()
+    unloadUser()
     history.push("/")
   }
 
@@ -74,6 +75,9 @@ const App = ({ user, loginUser, logoutUser }) => {
 }
 
 const mapStateToProps = ({ user }) => ({ user })
-const mapDispatchToProps = { loginUser, logoutUser }
+const mapDispatchToProps = { loadUser, unloadUser }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)

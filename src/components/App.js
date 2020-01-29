@@ -27,8 +27,7 @@ const App = ({ user, loadUser, unloadUser }) => {
       const sessionJSON = window.localStorage.getItem(USER_SESSION)
       if (sessionJSON) {
         console.log("Loading the session...")
-        const { token, name } = JSON.parse(sessionJSON)
-        loadUser(token, name)
+        loadUser(JSON.parse(sessionJSON))
       } else {
         // Otherwise wait for user to authenticate and then create new session
         const token = new URLSearchParams(location.search).get("token")
@@ -67,7 +66,7 @@ const App = ({ user, loadUser, unloadUser }) => {
             </p>
           </Route>
           <PrivateRoute path="/user">
-            <ActivityChart />
+            <ActivityChart user={user} />
           </PrivateRoute>
         </Switch>
       </Container>

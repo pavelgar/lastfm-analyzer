@@ -1,4 +1,4 @@
-import userService from "../services/user"
+import lastfmService from "../services/lastfm"
 import loginService from "../services/login"
 
 const userReducer = (state = null, action) => {
@@ -17,13 +17,13 @@ const userReducer = (state = null, action) => {
  * Fetch full user details by name,
  * load user's details to store.
  */
-export const loadUser = (token, username) => async dispatch => {
+export const loadUser = ({ token, name, id }) => async dispatch => {
   const [tokenIsValid, user] = await Promise.all([
     loginService.verifyToken(token),
-    userService.getInfo(username)
+    lastfmService.getInfo(name)
   ])
   if (tokenIsValid) {
-    dispatch({ type: "SET_USER", user })
+    dispatch({ type: "SET_USER", user: { ...user, id } })
   } else {
     dispatch({ type: "UNLOAD_USER" })
   }

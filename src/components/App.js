@@ -22,25 +22,27 @@ const App = ({ user, loadUser, unloadUser }) => {
 
   // Session management effect
   useEffect(() => {
-    // Check if user has old session
-    const sessionJSON = window.localStorage.getItem(USER_SESSION)
-    if (sessionJSON && !user) {
-      console.log("Loading the session...")
-      const session = JSON.parse(sessionJSON)
-      loadUser(session.name)
-    } else {
-      // Otherwise wait for user to authenticate and then create new session
-      const token = new URLSearchParams(location.search).get("token")
-      if (token && location.pathname === "/login") {
-        console.log("Authenticating...")
-        loginService
-          .login(token)
-          .then(session => {
-            console.log("Authentication successful.")
-            window.localStorage.setItem(USER_SESSION, JSON.stringify(session))
-            history.push("/")
-          })
-          .catch(error => console.error("Authentication failed"))
+    if (!user) {
+      // Check if user has old session
+      const sessionJSON = window.localStorage.getItem(USER_SESSION)
+      if (sessionJSON) {
+        console.log("Loading the session...")
+        const { token, name } = JSON.parse(sessionJSON)
+        loadUser(token, name)
+      } else {
+        // Otherwise wait for user to authenticate and then create new session
+        const token = new URLSearchParams(location.search).get("token")
+        if (token && location.pathname === "/login") {
+          console.log("Authenticating...")
+          loginService
+            .login(token)
+            .then(session => {
+              console.log("Authentication successful.")
+              window.localStorage.setItem(USER_SESSION, JSON.stringify(session))
+              history.push("/")
+            })
+            .catch(error => console.error("Authentication failed"))
+        }
       }
     }
   }, [user, history, location, loadUser])

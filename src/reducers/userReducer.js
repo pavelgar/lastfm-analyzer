@@ -1,4 +1,5 @@
 import userService from "../services/user"
+import loginService from "../services/login"
 
 const userReducer = (state = null, action) => {
   switch (action.type) {
@@ -11,10 +12,21 @@ const userReducer = (state = null, action) => {
   }
 }
 
-// Fetches full user details by name
-export const loadUser = username => async dispatch => {
-  const user = await userService.getInfo(username)
-  dispatch({ type: "SET_USER", user })
+/**
+ * Verify user's stored token,
+ * Fetch full user details by name,
+ * load user's details to store.
+ */
+export const loadUser = (token, username) => async dispatch => {
+  const [tokenIsValid, user] = await Promise.all([
+    loginService.verifyToken(token),
+    userService.getInfo(username)
+  ])
+  if (tokenIsValid) {
+    dispatch({ type: "SET_USER", user })
+  } else {
+    dispatch({ type: "UNLOAD_USER" })
+  }
 }
 
 export const unloadUser = () => ({ type: "UNLOAD_USER" })

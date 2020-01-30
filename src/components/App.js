@@ -55,7 +55,7 @@ const App = ({ user, loadUser, unloadUser }) => {
   return (
     <div>
       <NavBar user={user} handleLogout={handleLogout} />
-      <Container text style={{ marginTop: "7em" }}>
+      <Container style={{ marginTop: "7em" }}>
         <Switch>
           <Route exact path="/">
             <Header as="h2">Homepage</Header>
@@ -78,7 +78,4 @@ const App = ({ user, loadUser, unloadUser }) => {
 const mapStateToProps = ({ user }) => ({ user })
 const mapDispatchToProps = { loadUser, unloadUser }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)

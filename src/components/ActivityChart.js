@@ -17,14 +17,21 @@ const ActivityChart = ({ user }) => {
             .reverse()
 
           console.log(dateCounts)
-          // draw(dates)
+          draw(dateCounts)
         }
       })
     }
   }, [user])
 
   const draw = data => {
-    // TODO: Draw the graphics
+    const width = 700
+    const height = 500
+    const svg = d3
+      .select(canvas.current)
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .style("background-color", "lightgray")
   }
 
   return <div ref={canvas} />

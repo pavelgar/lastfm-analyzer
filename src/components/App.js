@@ -2,13 +2,14 @@ import React, { useEffect } from "react"
 import { Route, Switch, useLocation, useHistory } from "react-router-dom"
 import { connect } from "react-redux"
 
-import { Container, Header } from "semantic-ui-react"
+import { Container } from "semantic-ui-react"
 
 import loginService from "../services/login"
 import { loadUser, unloadUser } from "../reducers/userReducer"
 
 import LoginButton from "./LoginButton"
 import NavBar from "./NavBar"
+import Home from "./Home"
 import Footer from "./Footer"
 import ActivityChart from "./ActivityChart"
 import PrivateRoute from "./PrivateRoute"
@@ -55,14 +56,14 @@ const App = ({ user, loadUser, unloadUser }) => {
   return (
     <div>
       <NavBar user={user} handleLogout={handleLogout} />
-      <Container style={{ marginTop: "7em" }}>
+      <Container fluid style={{ marginTop: "8rem" }}>
         <Switch>
           <Route exact path="/">
-            <Header as="h2">Homepage</Header>
+            <Home />
           </Route>
           <Route path="/login">
             <p>
-              Please log in: <LoginButton />
+              Please log in first: <LoginButton />
             </p>
           </Route>
           <PrivateRoute path="/user">
@@ -78,4 +79,7 @@ const App = ({ user, loadUser, unloadUser }) => {
 const mapStateToProps = ({ user }) => ({ user })
 const mapDispatchToProps = { loadUser, unloadUser }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
